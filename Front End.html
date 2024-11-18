@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher's Toolkit</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background-color: #000000;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .header .nav a {
+            font-size: 1.5rem;
+            color: #fff;
+            text-decoration: none;
+            margin-left: 2.5rem;
+            transition: color 0.3s;
+        }
+
+        .header .nav a:hover {
+            color: #ffa500;
+        }
+
+        .header .menu-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .header .menu-btn:hover {
+            background-color: #ffa500;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            position: fixed;
+            top: 62px;
+            left: -200px;
+            height: 100%;
+            overflow-y: auto;
+            transition: left 0.3s;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #ffa500;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left:50px ;
+            padding: 2rem;
+            transition: margin-left 0.3s;
+        }
+
+        .main-content.sidebar-open {
+            margin-left: 250px;
+        }
+
+        .main-content .textbox {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top:165px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }       
+
+        .main-content .textbox h1 {
+            margin-top: 0px;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .main-content .textbox p {
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.6;
+        }   
+
+        .main-content .textbox .btn {
+            background-color: #007bff;
+         color: #fff;
+         border: none;
+         padding: 0.5rem 1rem;
+         border-radius: 4px;
+         cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .main-content .textbox .btn:hover {
+         background-color: #cf8700;
+        }
+
+        /* Cards */
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+            width: 30%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .card input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Form Input */
+        .lesson-form {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .lesson-form input, .lesson-form textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .lesson-form .drop-area {
+            border: 2px dashed #007bff;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .lesson-form .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .lesson-form .btn:hover {
+            background-color: #ffa500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .modal-content .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-content .close:hover,
+        .modal-content .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer a {
+            color: #ffa500;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header .nav {
+                display: none;
+            }
+
+            .sidebar {
+                width: 100%;
+                left: -100%;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .main-content.sidebar-open {
+                margin-left: 0;
+            }
+
+            .card-container {
+                flex-direction: column;
+            }
+
+            .card {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">Teacher's Toolkit</div>
+        <nav class="nav">
+            <a href="#" class="nav-link" data-page="home">Home</a>
+            <a href="#" class="nav-link" data-page="create-lesson">Create Lesson Plan</a>
+            <a href="#" class="nav-link" data-page="analytics">Analytics</a>
+        </nav>
+        <button class="menu-btn" id="menu-btn">Menu</button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <a href="#" class="sidebar-link" data-page="dashboard">Dashboard</a>
+        <a href="#" class="sidebar-link" data-page="history">History</a>
+        <a href="#" class="sidebar-link" data-page="resources">Other Resources</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <!-- Home Page -->
+        <div class="page" id="home">
+            <div class="textbox">
+                <h1>Welcome to Teacher's Toolkit</h1>
+                <p>Your ultimate teaching companion is here! Start creating and managing your lesson plans with ease.
+                    <br> Click on <b>"Create lesson plan"</b> to start using the tool!
+                </p>
+                
+            </div>
+        </div>
+
+        <!-- Create Lesson Plan Page -->
+        <div class="page" id="create-lesson" style="display:none;">
+            <h1><center>Create Lesson Plan</center></h1>
+            <div class="card-container">
+                <div class="card">
+                    <h2>Grade of Student</h2>
+                    <input type="text" id="grade-input" placeholder="Enter Grade" required>
+                </div>
+                <div class="card">
+                    <h2>Subject</h2>
+                    <input type="text" id="subject-input" placeholder="Enter Subject" required>
+                </div>
+                <div class="card">
+                    <h2>Topic of Discussion</h2>
+                    <input type="text" id="topic-input" placeholder="Enter Topic" required>
+                </div>
+            </div>
+            <form class="lesson-form">
+                <div id="output-area" class="drop-area">AI response will appear here...</div>
+                <input type="text" id="lesson-title" placeholder="Lesson Title (Auto-generated)" readonly>
+                <textarea id="lesson-description" placeholder="Lesson Description (Auto-generated)" readonly></textarea>
+                <div class="drop-area">Drag and drop materials here</div>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+
+        <!-- Analytics Page -->
+        <div class="page" id="analytics" style="display:none;">
+            <h1><center>Analytics</center></h1>
+            <p><center>Analytics Coming Soon! Keep an eye out!</center></p>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div class="page" id="dashboard" style="display:none;">
+            <h1><center>Dashboard</center></h1>
+            <div class="textbox">
+                <h2>Profile Information</h2>
+                <p><strong>Name:</strong> John Doe</p>
+                <p><strong>Email:</strong> john.doe@example.com</p>
+                <p><strong>Role:</strong> Teacher</p>
+            </div>
+        </div>
+
+        <!-- History Page -->
+        <div class="page" id="history" style="display:none;">
+            <h1><center>History</center></h1>
+            <p><center>Your history will be displayed here.</center></p>
+        </div>
+
+        <!-- Other Resources Page -->
+        <div class="page" id="resources" style="display:none;">
+            <h1><center>Other Resources</center></h1>
+            <p><center>Additional resources will be available here.</center></p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Teacher's Toolkit. All rights reserved.</p>
+        <a href="contact.html">Contact Us</a>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <h2>Welcome to Teacher's Toolkit</h2>
+            <p>Your ultimate teaching companion is here! Start creating and managing your lesson plans with ease.</p>
+            <button class="btn" id="get-started">Get Started</button>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">Just a moment...</div>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById('modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const getStartedBtn = document.getElementById('get-started');
+
+        // Show modal on page load
+        window.onload = function() {
+            modal.style.display = 'block';
+        }
+
+        // Close modal when close button is clicked
+        closeModalBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal when user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Close modal when "Get Started" button is clicked
+        getStartedBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Sidebar functionality
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menu-btn');
+
+        menuBtn.onclick = function() {
+            sidebar.classList.toggle('open');
+            document.querySelector('.main-content').classList.toggle('sidebar-open');
+        }
+
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const pages = document.querySelectorAll('.page');
+
+        function showPage(pageId) {
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => {
+        if (page.id === pageId) {
+            page.style.display = 'block';
+        } else {
+            page.style.display = 'none';
+        }
+    });
+}
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                showPage(pageId);
+                sidebar.classList.remove('open');
+                document.querySelector('.main-content').classList.remove('sidebar-open');
+            });
+        });
+
+        // Loader functionality
+        const loader = document.getElementById('loader');
+
+        // Show loader for 2 seconds on page load
+        window.onload = function() {
+            loader.style.display = 'block';
+            setTimeout(function() {
+                loader.style.display = 'none';
+            }, 2000);
+        }
+
+        // AI Response Simulation
+        const userInput = document.getElementById('user-input');
+        const outputArea = document.getElementById('output-area');
+        const lessonTitle = document.getElementById('lesson-title');
+        const lessonDescription = document.getElementById('lesson-description');
+
+        userInput.addEventListener('input', function() {
+            // Simulate AI response
+            const response = `AI generated response for "${userInput.value}"`;
+            outputArea.textContent = response;
+            lessonTitle.value = `Lesson: ${userInput.value}`;
+            lessonDescription.value = `Description: ${response}`;
+        });
+
+      // Redirect to Create Lesson Plan Page
+const createLessonBtn = document.getElementById('create-lesson-btn');
+createLessonBtn.addEventListener('click', function() {
+    showPage('create-lesson');
+});
+
+        // Optional: To handle the inputs and perform actions based on user input
+        const gradeInput = document.getElementById('grade-input');
+        const subjectInput = document.getElementById('subject-input');
+        const topicInput = document.getElementById('topic-input');
+
+document.querySelector('.lesson-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    console.log('Grade:', gradeInput.value);
+    console.log('Subject:', subjectInput.value);
+    console.log('Topic:', topicInput.value);
+});
+</script>
+</body>
+</html>
