@@ -1,5 +1,6 @@
 # Teachers-Toolkit
-This project was carried out by Team Electronics Waley
+This project was carried out by Team Electronics Waley.
+
 The Teachers' Toolkit project, focused on video analysis and summarization for lesson plan optimization, has the following key features:
 1.	Video Summarization: The toolkit can automatically generate concise summaries of teaching videos, highlighting key concepts, lessons, or instructional segments.
 2.	Engagement Metrics Analysis: It tracks and analyzes student engagement levels during video lessons, providing insights into which parts of the lesson maintain attention and where engagement drops.
